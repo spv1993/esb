@@ -1,8 +1,0 @@
-edu\servicemix\esb\commons\schedule\ScheduleResponse.class
-edu\servicemix\esb\commons\schedule\ObjectFactory.class
-edu\servicemix\esb\commons\schedule\Adapter1.class
-edu\servicemix\esb\commons\schedule\Event.class
-edu\servicemix\esb\commons\schedule\ArrayOfEvents.class
-edu\servicemix\esb\commons\schedule\GetEventsRequest.class
-edu\servicemix\esb\commons\schedule\package-info.class
-edu\servicemix\esb\commons\schedule\BaseResponse.class
