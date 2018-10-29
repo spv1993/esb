@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>edu.servicemix</groupId>
+		<artifactId>esb</artifactId>
+		<version>1.0.0</version>
+	</parent>
+  
+  	<groupId>edu.servicemix.esb</groupId>
+	<artifactId>commons</artifactId>
+	<packaging>bundle</packaging>
+	
+	<name>edu.servicemix.esb.commons</name>
+
+	<dependencies>
+		<dependency>
+		    <groupId>org.apache.cxf.xjc-utils</groupId>
+		    <artifactId>cxf-xjc-runtime</artifactId>
+		    <version>${xjc.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>jaxb2-maven-plugin</artifactId>
+	            <version>2.4</version>
+	            <executions>
+	                <execution>
+	                    <id>xjc</id>
+	                    <goals>
+	                        <goal>xjc</goal>
+	                    </goals>
+	                </execution>
+	            </executions>
+	            <configuration>
+	                <packageName>edu.servicemix.esb.commons.schedule</packageName>
+	                <sources>
+	                    <source>src/main/resources/META-INF/xsd/Schedule.xsd</source>
+	                </sources>
+	                <xjbSources>
+			            <xjbSource>src/main/resources/META-INF/xjb/Schedule.xjb</xjbSource>
+			        </xjbSources>
+	            </configuration>
+	        </plugin>
+			
+		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+			</plugin>
+		    
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<version>2.4.0</version>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.name}</Bundle-SymbolicName>
+						<Import-Package>
+							 javax.xml.*
+							,org.apache.cxf
+							,org.apache.cxf.*
+						</Import-Package>
+						<Export-Package>edu.servicemix.esb.commons.schedule</Export-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

@@ -1,0 +1,2 @@
+edu\servicemix\esb\adapters\events\mybatis\typehandlers\DurationTypeHandler.class
+edu\servicemix\esb\adapters\events\mybatis\EventAggregationStrategy.class

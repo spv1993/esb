@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.3.0"
+           xmlns:jaxws="http://cxf.apache.org/blueprint/jaxws"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cxf="http://cxf.apache.org/blueprint/core"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:camelcxf="http://camel.apache.org/schema/blueprint/cxf"
+           xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.5.0"
+           xmlns:functions="http://camel.apache.org/xml/function/"
+           xsi:schemaLocation="
+               http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+               http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
+               http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
+
+	<cm:property-placeholder id="events-config" persistent-id="edu.servicemix.esb.adapters.events" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="logger.name" value="edu.servicemix.esb.adapters.events"/>
+            <cm:property name="schedule.queue.request" value="schedule.sys.in.queue"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+	<bean id="eventAggregationStrategy" class="edu.servicemix.esb.adapters.events.mybatis.EventAggregationStrategy" />
+
+    <camelContext id="events-context" xmlns="http://camel.apache.org/schema/blueprint">
+    	<propertyPlaceholder id="events-properties" location="blueprint:events-config" prefixToken="[[" suffixToken="]]"/>
+
+		<dataFormats>
+		    <jaxb id="scheduleResponse-jaxb" prettyPrint="true" contextPath="edu.servicemix.esb.commons.schedule" 
+			    partClass="edu.servicemix.esb.commons.schedule.ScheduleResponse"
+			    fragment="true" partNamespace="{www.servicemix.edu/schedule/data}ScheduleResponse" />
+	    </dataFormats>
+
+   		<route id="events-amq-reader">
+   			<from uri="activemq:[[schedule.queue.request]]" />
+   			<log message="EventsAdapter: '${headers.operationName}' reading from queue '[[schedule.queue.request]]' with headers: ${headers} | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+   			<doTry>
+   				<choice>
+	   				<when>
+	   					<simple>${headers.operationName} == 'schedule'</simple>
+	   					<to uri="direct:operationGetAllEvents" />
+	   				</when>
+	   				<when>
+	   					<simple>${headers.operationName} == 'GetEvents' and ${headers.fromDate}</simple>
+	   					<to uri="direct:operationGetEventsFromDate" />
+	   				</when>
+	   				<when>
+	   					<simple>${headers.operationName} == 'GetEvents'</simple>
+	   					<to uri="direct:operationGetEventsWithoutDate" />   					
+	   				</when>
+	   				<otherwise>
+	   					<throwException exceptionType="java.lang.IllegalArgumentException" message="Unsupported opertaion type" />
+	   				</otherwise>
+	   			</choice>
+	   			
+	   			<log message="EventsAdapter: '${headers.operationName}' received: ${body} | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="DEBUG"/>
+	   			
+	   			<choice>
+	   				<when>
+	   					<simple>${body.size()} > 0</simple>
+	   					<split strategyRef="eventAggregationStrategy" >
+							<simple>${body}</simple>
+							<log message="EventsAdapter: '${headers.operationName}' splitting response... body: ${body} | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+						</split>
+	   				</when>
+	   				<otherwise>
+	   					<setBody><simple><![CDATA[<dummy/>]]></simple></setBody>
+	   					<unmarshal ref="scheduleResponse-jaxb" />
+	   				</otherwise>
+	   			</choice>
+	   			<log message="EventsAdapter: '${headers.operationName}' successful finished, body: ${body}, headers: ${headers} | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+	   			<doCatch>
+	   				<exception>java.lang.Exception</exception>
+	   				<log message="EventsAdapter: '${headers.operationName}' occurred exception, headers: ${headers} | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="ERROR"/>
+	   				<to uri="direct:eventsErrorHandler" />
+	   			</doCatch>	
+   			</doTry>
+   		</route>
+   		
+   		<route id="events-operation-GetAllEvents">
+   			<from uri="direct:operationGetAllEvents" />
+   			<log message="EventsAdapter: '${headers.operationName}' calling 'getAllEvents' | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+			
+			<to uri="mybatis:getAllEvents?statementType=SelectList" />
+			
+			<log message="EventsAdapter: '${headers.operationName}' successful finished 'getAllEvents' | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+   		</route>
+   		<route id="events-operation-GetEventsFromDate">
+   			<from uri="direct:operationGetEventsFromDate" />
+   			<log message="EventsAdapter: '${headers.operationName}' calling with selector fromDate | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+   			
+   			<setBody><groovy>[userName: request.headers.userName, fromDate: Date.parse("yyyy-MM-dd'T'HH:mm:ss",request.headers.fromDate)]</groovy></setBody>
+   			<to uri="mybatis:getEventsFromDate?statementType=SelectList" />
+			
+			<log message="EventsAdapter: '${headers.operationName}' successful finished 'getEventsFromDate' | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+   		</route>
+   		<route id="events-operation-GetEvents">
+   			<from uri="direct:operationGetEventsWithoutDate" />
+   			<log message="EventsAdapter: '${headers.operationName}' calling without selector fromDate | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+
+   			<setBody><simple>${headers.userName}</simple></setBody>
+   			<to uri="mybatis:getEventsWithoutDate?statementType=SelectList" />
+
+			<log message="EventsAdapter: '${headers.operationName}' successful finished 'getEventsWithoutDate' | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+   		</route>
+
+
+   		<route id="events-error-handler">
+   			<from uri="direct:eventsErrorHandler" />
+   			<choice>
+        		<when>
+        			<simple>${exception.message} != null and ${exception.message} != ''</simple>
+        			<setHeader headerName="EXCEPTION_MESSAGE"><simple>${exception.message}</simple></setHeader>
+        		</when>
+        		<otherwise>
+        			<setHeader headerName="EXCEPTION_MESSAGE"><simple>Unknown error type</simple></setHeader>
+        		</otherwise>
+        	</choice>
+        	<log message="EventsAdapter: '${headers.operationName}' failed with headers: ${headers} and body:\n${body} | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="ERROR"/>
+   		</route>
+   		
+    </camelContext>
+</blueprint>

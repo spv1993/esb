@@ -1,0 +1,12 @@
+<jaxb:bindings xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	jaxb:extensionBindingPrefixes="xjc">
+
+	<jaxb:globalBindings>
+        <jaxb:javaType name="java.util.Date" xmlType="xsd:dateTime"
+                 parseMethod="org.apache.cxf.xjc.runtime.DataTypeAdapter.parseDateTime"
+                 printMethod="org.apache.cxf.xjc.runtime.DataTypeAdapter.printDateTime" />
+    </jaxb:globalBindings>
+	
+</jaxb:bindings>

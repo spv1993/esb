@@ -1,0 +1,3 @@
+edu\servicemix\esb\services\schedule\rest\ScheduleRestService.class
+edu\servicemix\esb\services\schedule\rest\IScheduleRestService.class
+edu\servicemix\esb\services\schedule\rest\ScheduleRestService$DefaultProcessor.class

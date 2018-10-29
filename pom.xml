@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>edu.servicemix</groupId>
+	<artifactId>esb</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+	
+	<name>edu.servicemix.esb</name>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		
+		<cxf.version>3.1.9</cxf.version>
+	 	<camel.version>2.16.5</camel.version>
+	 	<felix.version>5.6.10</felix.version>
+	 	<xjc.version>3.1.0</xjc.version>
+	</properties>
+
+	<modules>
+		<module>services</module>
+		<module>adapters</module>
+		<module>commons</module>
+	</modules>
+	
+</project>

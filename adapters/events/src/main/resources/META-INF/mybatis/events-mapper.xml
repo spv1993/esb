@@ -1,0 +1,28 @@
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+				"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.servicemix.esb.adapters.events.mybatis.EventsMapper">
+
+	<resultMap id="eventResultMap" type="event">
+		<result property="name" column="eventname"/>
+		<result property="user" column="username"/>
+		<result property="description" column="description"/>
+		<result property="type" column="typename"/>
+		<result property="start" column="startdate"/>
+		<result property="duration" column="duration" typeHandler="durationTypeHandler"/>
+	</resultMap>
+
+	<select id="getEventsFromDate" statementType="CALLABLE" resultMap="eventResultMap" parameterType="java.util.Map">
+		{ call public.get_events(
+			#{userName,mode=IN,jdbcType=VARCHAR,javaType=java.lang.String}, 
+			#{fromDate,mode=IN,jdbcType=DATE,javaType=java.util.Date}) }
+	</select>
+	
+	<select id="getEventsWithoutDate" statementType="CALLABLE" resultMap="eventResultMap" parameterType="java.lang.String">
+		{ call public.get_events(#{userName,mode=IN,jdbcType=VARCHAR,javaType=java.lang.String}) }
+	</select>
+	
+	<select id="getAllEvents" statementType="CALLABLE" resultMap="eventResultMap">
+		{ call public.get_events() }
+	</select>
+</mapper>

@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>edu.servicemix</groupId>
+		<artifactId>services</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	
+	<groupId>edu.servicemix.esb.services</groupId>
+	<artifactId>schedule</artifactId>
+	<packaging>bundle</packaging>
+	
+	<name>edu.servicemix.esb.services.schedule</name>
+
+	<properties>
+        <maven.test.skip>false</maven.test.skip>
+    </properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>edu.servicemix.esb</groupId>
+			<artifactId>commons</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cxf</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-groovy</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+		<dependency> 
+			<groupId>org.apache.camel</groupId> 
+			<artifactId>camel-jaxb</artifactId> 
+			<version>${camel.version}</version> 
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.camel</groupId>
+		    <artifactId>camel-jms</artifactId>
+		    <version>${camel.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.camel</groupId>
+		    <artifactId>camel-saxon</artifactId>
+		    <version>${camel.version}</version>
+		</dependency>	
+		<dependency>
+		    <groupId>org.apache.cxf.xjc-utils</groupId>
+		    <artifactId>cxf-xjc-runtime</artifactId>
+		    <version>${xjc.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-camel</artifactId>
+			<version>5.12.3</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.activemq</groupId>
+		    <artifactId>activemq-core</artifactId>
+		    <version>5.7.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.activemq</groupId>
+		    <artifactId>activemq-pool</artifactId>
+		    <version>5.12.3</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.codehaus.groovy</groupId>
+		    <artifactId>groovy-all</artifactId>
+		    <version>2.4.5</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.osgi</groupId>
+		    <artifactId>org.osgi.core</artifactId>
+		    <version>5.0.0</version>
+		</dependency>
+		
+		
+		<!-- Camel Blueprint Test -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test-blueprint</artifactId>
+			<version>${camel.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpclient</artifactId>
+		    <version>4.5.6</version>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http-jetty</artifactId>
+            <version>${cxf.version}</version>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-commons</artifactId>
+            <version>5.0.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.6.1</version>
+    		<scope>test</scope>
+       </dependency>
+       
+       <dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+       </dependency>
+       <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.http</artifactId>
+            <version>1.2.1</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<version>1.0.0</version>
+	    </dependency>
+	</dependencies>
+  
+  	<build>
+		<plugins>
+		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+			</plugin>
+		    
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<version>2.4.0</version>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.name}</Bundle-SymbolicName>
+						<Import-Package>
+						     groovy.lang
+                            ,org.codehaus.groovy
+                            ,org.codehaus.groovy.control
+                            ,org.codehaus.groovy.control.customizers
+                            ,org.codehaus.groovy.reflection
+                            ,org.codehaus.groovy.runtime
+                            ,org.codehaus.groovy.runtime.callsite
+							,org.apache.camel
+							,org.apache.camel.*
+							,org.apache.activemq
+							,org.apache.activemq.*
+							,org.osgi.service.blueprint
+							,javax.ws.rs
+							,javax.ws.rs.*
+							,edu.servicemix.esb.commons.schedule
+						</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+                <configuration>
+                    <skipTests>false</skipTests>
+                </configuration>
+            </plugin>
+
+		</plugins>
+	</build>
+</project>
