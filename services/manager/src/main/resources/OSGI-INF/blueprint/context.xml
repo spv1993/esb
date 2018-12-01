@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.3.0"
+           xmlns:jaxws="http://cxf.apache.org/blueprint/jaxws"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cxf="http://cxf.apache.org/blueprint/core"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:camelcxf="http://camel.apache.org/schema/blueprint/cxf"
+           xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.5.0"
+           xmlns:functions="http://camel.apache.org/xml/function/"
+           xsi:schemaLocation="
+               http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+               http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
+               http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
+
+    <cm:property-placeholder id="manager-rs-config" persistent-id="edu.servicemix.esb.services.manager" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="rs.address" value="/rest/manager"/>
+            <cm:property name="logger.name" value="edu.servicemix.esb.services.manager"/>
+            <cm:property name="seda.api.size" value="100"/>
+            <cm:property name="seda.api.concurrentConsumers" value="100"/>
+            <cm:property name="seda.api.timeout" value="600000"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="managerScheduleService" class="edu.servicemix.esb.services.manager.ManagerScheduleService"/>
+
+    <bean id="managerRestService" class="edu.servicemix.esb.services.manager.rest.ManagerRestService">
+        <property name="producerTemplate" ref="managerProducerTemplate" />
+    </bean>
+
+    <jaxrs:server id="manager-rs" address="${rs.address}">
+        <jaxrs:serviceBeans>
+            <ref component-id="managerRestService"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
+    <camelContext id="manager-rs-context" xmlns="http://camel.apache.org/schema/blueprint">
+        <propertyPlaceholder id="manager-rs-properties" location="blueprint:manager-rs-config" prefixToken="[[" suffixToken="]]"/>
+
+        <template id="managerProducerTemplate"/>
+
+        <endpoint id="sedaManagerAPI" uri="seda:sedaManagerAPI?size=[[seda.api.size]]&amp;concurrentConsumers=[[seda.api.concurrentConsumers]]&amp;timeout=[[seda.api.timeout]]" />
+
+        <route id="seda-manager-rs-api">
+            <from uri="sedaManagerAPI"/>
+            <log message="ManagerRestService: '${headers.operationName}' is started | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+            <inOnly uri="direct:managerSchedule"/>
+            <setBody><constant><![CDATA[<BaseResponse><Status>OK</Status></BaseResponse>]]></constant></setBody>
+        </route>
+
+        <route id="manager-schedule">
+            <from uri="direct:managerSchedule"/>
+            <log message="ManagerRestService: 'managerSchedule' is started | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+            <to uri="bean:managerScheduleService?method=doCall"/>
+            <log message="ManagerRestService: 'managerSchedule' is finished | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+        </route>
+
+    </camelContext>
+
+</blueprint>

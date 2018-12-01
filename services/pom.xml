@@ -14,5 +14,6 @@
 
   <modules>
   	<module>schedule</module>
+      <module>manager</module>
   </modules>
 </project>
