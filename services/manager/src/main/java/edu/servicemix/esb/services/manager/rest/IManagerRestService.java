@@ -3,17 +3,12 @@ package edu.servicemix.esb.services.manager.rest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import edu.servicemix.esb.commons.rest.IDefaultRestService;
+import edu.servicemix.esb.commons.rest.IPingService;
 
-public interface IManagerRestService {
+public interface IManagerRestService extends IPingService, IDefaultRestService {
 
     String REQUEST_ENDPOINT = "sedaManagerAPI";
-
-    @GET
-    @Path("/ping")
-    @Produces(MediaType.APPLICATION_XML)
-    default String ping() {
-        return "<BaseResponse><Status>SUCCESS</Status></BaseResponse>";
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_XML)

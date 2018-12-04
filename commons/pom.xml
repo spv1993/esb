@@ -14,13 +14,33 @@
 	
 	<name>edu.servicemix.esb.commons</name>
 
-	<dependencies>
-		<dependency>
-		    <groupId>org.apache.cxf.xjc-utils</groupId>
-		    <artifactId>cxf-xjc-runtime</artifactId>
-		    <version>${xjc.version}</version>
-		</dependency>
-	</dependencies>
+	<!--<dependencies>-->
+		<!--<dependency>-->
+			<!--<groupId>org.apache.camel</groupId>-->
+			<!--<artifactId>camel-core</artifactId>-->
+			<!--<version>${camel.version}</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>org.apache.camel</groupId>-->
+			<!--<artifactId>camel-cxf</artifactId>-->
+			<!--<version>${camel.version}</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+		    <!--<groupId>org.apache.cxf.xjc-utils</groupId>-->
+		    <!--<artifactId>cxf-xjc-runtime</artifactId>-->
+		    <!--<version>${xjc.version}</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>org.osgi</groupId>-->
+			<!--<artifactId>org.osgi.core</artifactId>-->
+			<!--<version>5.0.0</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>log4j</groupId>-->
+			<!--<artifactId>log4j</artifactId>-->
+			<!--<version>1.2.17</version>-->
+		<!--</dependency>-->
+	<!--</dependencies>-->
 
 	<build>
 		<plugins>
@@ -64,10 +84,22 @@
 						<Bundle-SymbolicName>${project.name}</Bundle-SymbolicName>
 						<Import-Package>
 							 javax.xml.*
+							,org.apache.camel
+							,org.apache.camel.*
 							,org.apache.cxf
 							,org.apache.cxf.*
+							,javax.ws.rs
+							,javax.ws.rs.*
+							,org.apache.log4j
+							,org.apache.log4j.*
+							,org.osgi.framework
+							,org.osgi.service.blueprint
 						</Import-Package>
-						<Export-Package>edu.servicemix.esb.commons.schedule</Export-Package>
+						<Export-Package>
+							 edu.servicemix.esb.commons.schedule
+							,edu.servicemix.esb.commons.rest
+							,edu.servicemix.esb.commons.rest.*
+						</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>

@@ -7,27 +7,22 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
+import edu.servicemix.esb.commons.rest.IDefaultRestService;
+import edu.servicemix.esb.commons.rest.IPingService;
 import edu.servicemix.esb.commons.schedule.GetEventsRequest;
 
 @Path("/")
-public interface IScheduleRestService {
+public interface IScheduleRestService extends IPingService, IDefaultRestService {
 
 	String REQUEST_ENDPOINT = "sedaScheduleAPI";
-	
-	@GET
-	@Path("/ping")
-	default String ping() {
-		return "SUCCESS";
-	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-	public Response schedule();
+	Response schedule();
 	
 	@POST
 	@Path("/GetEvents")
 	@Produces(MediaType.APPLICATION_XML)
 	@Consumes(MediaType.APPLICATION_XML)
-	public Response getEvents(GetEventsRequest body);
+	Response getEvents(GetEventsRequest body);
 }
