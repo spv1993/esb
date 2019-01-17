@@ -17,6 +17,10 @@
     <cm:property-placeholder id="manager-rs-config" persistent-id="edu.servicemix.esb.services.manager" update-strategy="reload">
         <cm:default-properties>
             <cm:property name="rs.address" value="/rest/manager"/>
+            <cm:property name="service.address" value="http://localhost:8080"/>
+            <cm:property name="service.soTimeout" value="10"/>
+            <cm:property name="service.http.connection.stalecheck" value="true"/>
+            <cm:property name="service.http.socket.timeout" value="0"/>
             <cm:property name="logger.name" value="edu.servicemix.esb.services.manager"/>
             <cm:property name="seda.api.size" value="100"/>
             <cm:property name="seda.api.concurrentConsumers" value="100"/>
@@ -45,9 +49,38 @@
 
         <route id="seda-manager-rs-api">
             <from uri="sedaManagerAPI"/>
-            <log message="ManagerRestService: '${headers.operationName}' is started | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
-            <inOnly uri="direct:managerSchedule"/>
-            <setBody><constant><![CDATA[<BaseResponse><Status>OK</Status></BaseResponse>]]></constant></setBody>
+            <log message="ManagerRestService: '${headers.operationName}' is started, headers=${headers} | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+            <choice>
+                <when>
+                    <simple>${headers.operationName} in 'start,stop'</simple>
+                    <inOnly uri="direct:managerSchedule"/>
+                    <setBody><constant><![CDATA[<BaseResponse><Status>OK</Status></BaseResponse>]]></constant></setBody>
+                </when>
+                <when>
+                    <simple>${headers.operationName} == 'searchEvents'</simple>
+                    <doTry>
+                        <toD uri="[[service.address]]?isExceptionThrows=true&amp;throwExceptionOnFailure=false&amp;chunked=false&amp;httpClient.soTimeout=[[service.soTimeout]]&amp;http.socket.timeout=[[service.http.socket.timeout]]&amp;http.connection.stalecheck=[[service.http.connection.stalecheck]]"/>
+                        <filter>
+                            <simple>${headers.Content-Type} not contains 'application/xml' or ${headers.CamelHttpResponseCode} >= 300</simple>
+                            <log message="ManagerRestService: '${headers.operationName}' is finished with error, responseCode=${headers.CamelHttpResponseCode} | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="ERROR"/>
+                            <setBody><simple><![CDATA[<BaseResponse><Status>ERROR</Status><Message>Response code is ${headers.CamelHttpResponseCode} and ${headers.Content-Type}</Message></BaseResponse>]]></simple></setBody>
+                        </filter>
+                        <doCatch>
+                            <exception>java.io.IOException</exception>
+                            <handled><constant>true</constant></handled>
+                            <log message="ManagerRestService: '${headers.operationName}' throws exceptionMessage=${exception.message}, headers=${headers}" logName="[[logger.name]]" loggingLevel="ERROR"/>
+                            <setBody><simple><![CDATA[<BaseResponse><Status>ERROR</Status><Message>${exception.message}</Message></BaseResponse>]]></simple></setBody>
+                        </doCatch>
+                    </doTry>
+                    <convertBodyTo type="java.lang.String"/>
+                </when>
+                <otherwise>
+                    <log message="ManagerRestService: '${headers.operationName}' is unsupported | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="ERROR"/>
+                    <setBody><simple><![CDATA[<BaseResponse><Status>ERROR</Status><Message>'${headers.operationName}' is unsupported</Message></BaseResponse>]]></simple></setBody>
+                </otherwise>
+            </choice>
+            <log message="ManagerRestService: '${headers.operationName}' is finished, headers=${headers}, body=${body} | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+            <removeHeaders pattern="*"/>
         </route>
 
         <route id="manager-schedule">
