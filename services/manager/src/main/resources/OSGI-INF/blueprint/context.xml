@@ -29,6 +29,7 @@
     </cm:property-placeholder>
 
     <bean id="managerScheduleService" class="edu.servicemix.esb.services.manager.ManagerScheduleService"/>
+    <bean id="eventHashGeneratorService" class="edu.servicemix.esb.services.manager.EventHashGeneratorService"/>
 
     <bean id="managerRestService" class="edu.servicemix.esb.services.manager.rest.ManagerRestService">
         <property name="producerTemplate" ref="managerProducerTemplate" />
@@ -55,6 +56,23 @@
                     <simple>${headers.operationName} in 'start,stop'</simple>
                     <inOnly uri="direct:managerSchedule"/>
                     <setBody><constant><![CDATA[<BaseResponse><Status>OK</Status></BaseResponse>]]></constant></setBody>
+                </when>
+                <when>
+                    <simple>${headers.operationName} in 'hashGeneration'</simple>
+                    <choice>
+                        <when>
+                            <simple>${headers.SyncFlag} == 'false'</simple>
+                            <inOnly uri="direct:managerAsyncHashGeneration"/>
+                        </when>
+                        <when>
+                            <simple>${headers.SyncFlag} == 'true'</simple>
+                            <inOut uri="direct:managerSyncHashGeneration"/>
+                        </when>
+                    </choice>
+                </when>
+                <when>
+                    <simple>${headers.operationName} in 'getHashes'</simple>
+                    <to uri="direct:managerGetHashes"/>
                 </when>
                 <when>
                     <simple>${headers.operationName} == 'searchEvents'</simple>
@@ -86,8 +104,28 @@
         <route id="manager-schedule">
             <from uri="direct:managerSchedule"/>
             <log message="ManagerRestService: 'managerSchedule' is started | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
-            <to uri="bean:managerScheduleService?method=doCall"/>
+            <bean ref="managerScheduleService" method="doCall"/>
             <log message="ManagerRestService: 'managerSchedule' is finished | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+        </route>
+        <route id="manager-sync-hash-generation">
+            <from uri="direct:managerSyncHashGeneration"/>
+            <log message="ManagerRestService: Sync 'eventHashGeneratorService' is started | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+            <bean ref="eventHashGeneratorService" method="doSyncCall"/>
+            <setBody><simple><![CDATA[<BaseResponse><EventId>${headers.eventId}</EventId><Response>${body}</Response></BaseResponse>]]></simple></setBody>
+            <log message="ManagerRestService: Sync 'eventHashGeneratorService' is finished | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+        </route>
+        <route id="manager-async-hash-generation">
+            <from uri="direct:managerAsyncHashGeneration"/>
+            <log message="ManagerRestService: Async 'eventHashGeneratorService' is started | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+            <bean ref="eventHashGeneratorService" method="doAsyncCall"/>
+            <setBody><constant><![CDATA[<BaseResponse><Status>Success</Status></BaseResponse>]]></constant></setBody>
+            <log message="ManagerRestService: Async 'eventHashGeneratorService' is finished | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+        </route>
+        <route id="manager-get-hashes">
+            <from uri="direct:managerGetHashes"/>
+            <log message="ManagerRestService: 'eventHashGeneratorService' is started | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
+            <bean ref="eventHashGeneratorService" method="getHashes"/>
+            <log message="ManagerRestService: 'eventHashGeneratorService' is finished | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="INFO"/>
         </route>
 
     </camelContext>

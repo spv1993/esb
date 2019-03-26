@@ -4,6 +4,32 @@
 	xmlns="www.servicemix.edu/schedule/data"
 	elementFormDefault="qualified">
 
+	<xs:element name="GetHashesResponse">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="BaseResponse">
+					<xs:sequence>
+						<xs:element name="EventHashes" type="EventHashes" minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="EventHashes">
+		<xs:sequence>
+			<xs:element name="EventId" type="xs:string" />
+			<xs:element name="HashCount" type="xs:integer" />
+			<xs:element name="ArrayOfHashes" type="ArrayOfHashes" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ArrayOfHashes">
+		<xs:sequence>
+			<xs:element name="Hash" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
 	<xs:element name="GetEventsRequest">
 		<xs:complexType>
 			<xs:sequence>

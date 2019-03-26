@@ -26,4 +26,30 @@ public class ManagerRestService implements IManagerRestService {
         headers.put("eventId", eventId);
         return tryExecute(REQUEST_ENDPOINT, null, headers, producerTemplate, Object.class, logger);
     }
+
+    @Override
+    public Response asyncHashGeneration(String eventId) {
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("operationName", "hashGeneration");
+        headers.put("SyncFlag", "false");
+        headers.put("eventId", eventId);
+        return tryExecute(REQUEST_ENDPOINT, null, headers, producerTemplate, Object.class, logger);
+    }
+
+    @Override
+    public Response syncHashGeneration(String eventId) {
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("operationName", "hashGeneration");
+        headers.put("SyncFlag", "true");
+        headers.put("eventId", eventId);
+        return tryExecute(REQUEST_ENDPOINT, null, headers, producerTemplate, Object.class, logger);
+    }
+
+
+    @Override
+    public Response getHashes() {
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("operationName", "getHashes");
+        return tryExecute(REQUEST_ENDPOINT, null, headers, producerTemplate, Object.class, logger);
+    }
 }
