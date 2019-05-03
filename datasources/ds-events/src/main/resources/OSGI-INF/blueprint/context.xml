@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.3.0"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <cm:property-placeholder id="ds-events-config" persistent-id="edu.servicemix.esb.datasource.dsevents" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="url" value="jdbc:postgresql://localhost:5432/servicemix"/>
+            <cm:property name="user" value="postgres"/>
+            <cm:property name="password" value="postgres"/>
+            <cm:property name="driverClassName" value="org.postgresql.Driver"/>
+
+            <cm:property name="defaultAutoCommit" value="false"/>
+            <cm:property name="validationQuery" value="select 1"/>
+            <cm:property name="maxActive" value="100"/>
+            <cm:property name="initialSize" value="10"/>
+            <cm:property name="maxIdle" value="50"/>
+            <cm:property name="minIdle" value="10"/>
+            <cm:property name="removeAbandoned" value="false"/>
+            <cm:property name="logAbandoned" value="true"/>
+            <cm:property name="testWhileIdle" value="true"/>
+            <cm:property name="testOnBorrow" value="true"/>
+            <cm:property name="validationInterval" value="120000"/>
+            <cm:property name="rollbackOnReturn" value="true"/>
+
+            <cm:property name="timeBetweenEvictionRunsMillis" value="30000"/>
+            <cm:property name="removeAbandonedTimeout" value="60"/>
+            <cm:property name="jdbcInterceptors" value="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer;org.apache.tomcat.jdbc.pool.interceptor.ResetAbandonedTimer"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+
+    <bean id="eventsDS" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="url" value="${url}" />
+        <property name="username" value="${user}" />
+        <property name="password" value="${password}" />
+        <property name="driverClassName" value="${driverClassName}" />
+
+        <property name="defaultAutoCommit" value="${defaultAutoCommit}" />
+        <property name="validationQuery" value="${validationQuery}" />
+        <property name="maxActive" value="${maxActive}" />
+        <property name="initialSize" value="${initialSize}" />
+        <property name="maxIdle" value="${maxIdle}" />
+        <property name="minIdle" value="${minIdle}" />
+        <property name="removeAbandoned" value="${removeAbandoned}" />
+        <property name="logAbandoned" value="${logAbandoned}" />
+        <property name="testWhileIdle" value="${testWhileIdle}" />
+        <property name="testOnBorrow" value="${testOnBorrow}" />
+        <property name="validationInterval" value="${validationInterval}" />
+        <property name="rollbackOnReturn" value="${rollbackOnReturn}" />
+
+        <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+        <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}" />
+        <property name="jdbcInterceptors" value="${jdbcInterceptors}" />
+
+    </bean>
+
+    <service ref="eventsDS" interface="org.apache.tomcat.jdbc.pool.DataSource">
+        <service-properties>
+            <entry key="osgi.jndi.service.name" value="jdbc/events" />
+            <entry key="datasource.name" value="eventsDS" />
+        </service-properties>
+    </service>
+
+</blueprint>

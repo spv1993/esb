@@ -3,14 +3,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>edu.servicemix</groupId>
+		<groupId>edu.servicemix.esb</groupId>
 		<artifactId>esb</artifactId>
-		<version>1.0.0</version>
+		<version>${version}.${revision}</version>
+		<relativePath>..</relativePath>
 	</parent>
-  
-  	<groupId>edu.servicemix.esb</groupId>
+
 	<artifactId>commons</artifactId>
 	<packaging>bundle</packaging>
+	<version>1.0.0</version>
 	
 	<name>edu.servicemix.esb.commons</name>
 

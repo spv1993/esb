@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="edu.servicemix.esb.services" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0">
+
+    <feature name="edu.servicemix.esb.services.transformer" version="1.0.0">
+        <feature version="2.16.5">camel</feature>
+        <feature version="2.16.5">camel-blueprint</feature>
+
+        <bundle>mvn:edu.servicemix.esb.services/transformer/1.0.0</bundle>
+    </feature>
+
+</features>

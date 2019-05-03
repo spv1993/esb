@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
   
 	<parent>
-		<groupId>edu.servicemix</groupId>
+		<groupId>edu.servicemix.esb.adapters</groupId>
 		<artifactId>adapters</artifactId>
-		<version>1.0.0</version>
+		<version>${version}.${revision}</version>
+		<relativePath>..</relativePath>
 	</parent>
-  
-	<groupId>edu.servicemix.esb.adapters</groupId>
+
 	<artifactId>events</artifactId>
 	<packaging>bundle</packaging>
 	
@@ -22,7 +22,7 @@
 		<dependency>
 			<groupId>edu.servicemix.esb</groupId>
 			<artifactId>commons</artifactId>
-			<version>1.0.0</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
@@ -52,6 +52,9 @@
 						<Import-Package>
 							 javax.sql
 							,javax.jms
+							,org.apache.aries.transaction
+							,org.springframework.transaction
+							,org.apache.tomcat.jdbc.pool
 							,groovy.lang
                             ,org.codehaus.groovy
                             ,org.codehaus.groovy.control
@@ -67,6 +70,7 @@
 							,org.apache.activemq.*
 							,org.osgi.service.blueprint
 							,edu.servicemix.esb.commons.schedule
+                            ,org.postgresql
 						</Import-Package>
 					</instructions>
 				</configuration>

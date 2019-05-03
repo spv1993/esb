@@ -1,15 +1,17 @@
 package edu.servicemix.esb.adapters.events.mybatis.typehandlers;
 
+import org.apache.cxf.jaxb.DatatypeFactory;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.TypeHandler;
+
+import javax.xml.datatype.Duration;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalTime;
-import javax.xml.datatype.Duration;
-import org.apache.cxf.jaxb.DatatypeFactory;
-import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.TypeHandler;
 
+@SuppressWarnings("PackageAccessibility")
 public class DurationTypeHandler implements TypeHandler<Duration> {
 
 	@Override

@@ -1,19 +1,19 @@
 package edu.servicemix.esb.adapters.events;
 
+import edu.servicemix.esb.commons.schedule.ArrayOfEvents;
+import edu.servicemix.esb.commons.schedule.Event;
+import edu.servicemix.esb.commons.schedule.ScheduleResponse;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockComponent;
 import org.apache.camel.test.blueprint.CamelBlueprintTestSupport;
-import org.junit.Test;
 import org.apache.cxf.jaxb.DatatypeFactory;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-
-import edu.servicemix.esb.commons.schedule.ArrayOfEvents;
-import edu.servicemix.esb.commons.schedule.Event;
-import edu.servicemix.esb.commons.schedule.ScheduleResponse;
 
 public class EventsAdapterBlueprintTest extends CamelBlueprintTestSupport {
 
@@ -38,7 +38,7 @@ public class EventsAdapterBlueprintTest extends CamelBlueprintTestSupport {
 			public void configure() throws Exception {
 				replaceRouteFromWith("events-amq-reader", INPUT_ENDPOINT);
 				
-				context.getRouteDefinition("events-operation-schedule").adviceWith(context, new AdviceWithRouteBuilder() {		
+				context.getRouteDefinition("events-operation-GetAllEvents").adviceWith(context, new AdviceWithRouteBuilder() {
 					@Override
 					public void configure() throws Exception {
 						weaveByToString(".*mybatis:.*").replace().process(exchange -> {

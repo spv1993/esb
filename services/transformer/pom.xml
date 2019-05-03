@@ -9,24 +9,14 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>manager</artifactId>
+    <artifactId>transformer</artifactId>
     <packaging>bundle</packaging>
     <version>1.0.0</version>
 
-    <name>edu.servicemix.esb.services.manager</name>
+    <name>edu.servicemix.esb.services.transformer</name>
 
     <dependencies>
-        <dependency>
-            <groupId>edu.servicemix.esb</groupId>
-            <artifactId>commons</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-http</artifactId>
-            <version>${camel.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -46,20 +36,12 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.name}</Bundle-SymbolicName>
-                        <Private-Package>edu.servicemix.esb.services.manager.osgi.*</Private-Package>
-                        <Bundle-Activator>edu.servicemix.esb.services.manager.osgi.ManagerServiceActivator</Bundle-Activator>
                         <Import-Package>
-                             org.apache.log4j
-                            ,org.apache.log4j.*
-                            ,org.apache.camel
+                            org.apache.camel
                             ,org.apache.camel.*
-                            ,javax.ws.rs
-                            ,javax.ws.rs.*
-                            ,org.osgi.framework
                             ,org.osgi.service.blueprint
-                            ,edu.servicemix.esb.commons.schedule
-                            ,edu.servicemix.esb.commons.rest
-                            ,edu.servicemix.esb.commons.rest.*
+                            ,org.apache.log4j
+                            ,org.apache.log4j.*
                         </Import-Package>
                     </instructions>
                 </configuration>
