@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="${project.groupId}/${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.0.0">
+
+    <feature name="edu.servicemix.esb.features.commons" version="${project.version}">
+        <feature version="${camel.version}">camel</feature>
+        <feature version="${camel.version}">camel-metrics</feature>
+        <feature version="${camel.version}">camel-saxon</feature>
+        <feature version="${camel.version}">camel-velocity</feature>
+        <feature version="${camel.version}">camel-servlet</feature>
+        <feature version="${camel.version}">camel-mybatis</feature>
+
+        <feature version="${camel.version}">camel-script</feature>
+
+        <feature>jndi</feature>
+
+        <bundle>mvn:edu.servicemix.esb/commons/${project.version}</bundle>
+    </feature>
+
+</features>
