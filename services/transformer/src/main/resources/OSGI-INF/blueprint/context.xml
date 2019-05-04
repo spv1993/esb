@@ -14,15 +14,22 @@
                http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
                http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
 
+    <bean id="transform" class="edu.servicemix.esb.services.transformer.Transform">
+        <property name="name" value="Timer"/>
+    </bean>
+
     <camelContext id="transformerContext" xmlns="http://camel.apache.org/schema/blueprint">
         <route id="transform-ping-route">
             <from uri="direct:transform-ping-route"/>
             <setBody><constant>SUCCESS</constant></setBody>
+            <log message="TransformerOperation: The message contains ${body}"/>
         </route>
 
-        <route id="transform-test-timer-route">
-            <from uri="timer://tranTimer?repeatCount=1"/>
-            <log message="TEST TIMER IS WORKING"/>
+        <route id="transform-timer-route">
+            <from uri="timer://tranTimer?period=5000"/>
+            <setBody><method ref="transform" method="doTransformation"/></setBody>
+            <log message="TransformerOperation: The message contains ${body}"/>
+            <to uri="mock:result"/>
         </route>
 
     </camelContext>

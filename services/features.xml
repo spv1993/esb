@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <features name="${project.groupId}/${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0">
 
-    <feature name="edu.servicemix.esb.services.transformer" version="${project.version}">
+    <feature name="transformer" version="${project.version}">
         <feature version="${camel.version}">camel</feature>
         <feature version="${camel.version}">camel-blueprint</feature>
 

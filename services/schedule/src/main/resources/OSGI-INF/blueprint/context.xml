@@ -25,7 +25,7 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
-	<bean id="scheduleRestService" class="edu.servicemix.esb.services.schedule.rest.ScheduleRestService">
+	<bean id="scheduleRestService" class="edu.servicemix.esb.services.transformer.schedule.rest.ScheduleRestService">
 		<property name="producerTemplate" ref="scheduleProducerTemplate" />
 	</bean>
 	

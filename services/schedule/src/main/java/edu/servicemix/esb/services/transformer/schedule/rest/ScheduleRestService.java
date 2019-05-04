@@ -1,4 +1,4 @@
-package edu.servicemix.esb.services.schedule.rest;
+package edu.servicemix.esb.services.transformer.schedule.rest;
 
 import javax.ws.rs.core.Response;
 import org.apache.camel.ProducerTemplate;

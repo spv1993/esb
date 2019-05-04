@@ -1,4 +1,4 @@
-package edu.servicemix.esb.services.schedule;
+package edu.servicemix.esb.services.transformer.schedule;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,6 +1,6 @@
-package edu.servicemix.esb.services.manager.osgi;
+package edu.servicemix.esb.services.transformer.manager.osgi;
 
-import edu.servicemix.esb.services.manager.ManagerScheduleService;
+import edu.servicemix.esb.services.transformer.manager.ManagerScheduleService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 

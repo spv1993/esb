@@ -26,8 +26,9 @@
 		<httpclient.version>4.5.6</httpclient.version>
 		<asm-commons.version>5.0.3</asm-commons.version>
 		<org.osgi.service.http.version>1.2.1</org.osgi.service.http.version>
-		<pax.exam.version>4.13.1</pax.exam.version>
+		<pax.exam.version>4.4.0</pax.exam.version>
         <karaf.version>3.0.1</karaf.version>
+        <junit.version>4.11</junit.version>
 
 
 		<revision>0</revision>
@@ -39,6 +40,7 @@
 		<module>adapters</module>
 		<module>commons</module>
 		<module>datasources</module>
+        <module>itests</module>
     </modules>
 
 	<dependencies>
@@ -156,8 +158,8 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>features.xml</include>
-                    <include>*.cfg</include>
-                    <include>install.scr</include>
+                    <!--<include>*.cfg</include>-->
+                    <!--<include>install.scr</include>-->
                 </includes>
             </resource>
         </resources>

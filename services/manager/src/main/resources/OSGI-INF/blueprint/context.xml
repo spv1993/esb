@@ -28,10 +28,10 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
-    <bean id="managerScheduleService" class="edu.servicemix.esb.services.manager.ManagerScheduleService"/>
-    <bean id="eventHashGeneratorService" class="edu.servicemix.esb.services.manager.EventHashGeneratorService"/>
+    <bean id="managerScheduleService" class="edu.servicemix.esb.services.transformer.manager.ManagerScheduleService"/>
+    <bean id="eventHashGeneratorService" class="edu.servicemix.esb.services.transformer.manager.EventHashGeneratorService"/>
 
-    <bean id="managerRestService" class="edu.servicemix.esb.services.manager.rest.ManagerRestService">
+    <bean id="managerRestService" class="edu.servicemix.esb.services.transformer.manager.rest.ManagerRestService">
         <property name="producerTemplate" ref="managerProducerTemplate" />
     </bean>
 

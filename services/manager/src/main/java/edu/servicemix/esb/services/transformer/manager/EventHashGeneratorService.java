@@ -1,4 +1,4 @@
-package edu.servicemix.esb.services.manager;
+package edu.servicemix.esb.services.transformer.manager;
 
 import edu.servicemix.esb.commons.schedule.ArrayOfHashes;
 import edu.servicemix.esb.commons.schedule.EventHashes;

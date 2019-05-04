@@ -13,7 +13,7 @@
     <packaging>bundle</packaging>
     <version>1.0.0</version>
 
-    <name>edu.servicemix.esb.services.transformer</name>
+    <name>edu.servicemix.esb.services.transformer.Transform</name>
 
     <dependencies>
 
