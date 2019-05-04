@@ -47,7 +47,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.name}</Bundle-SymbolicName>
                         <Private-Package>edu.servicemix.esb.services.manager.osgi.*</Private-Package>
-                        <Bundle-Activator>edu.servicemix.esb.services.transformer.manager.osgi.ManagerServiceActivator</Bundle-Activator>
+                        <Bundle-Activator>edu.servicemix.esb.services.manager.osgi.ManagerServiceActivator</Bundle-Activator>
                         <Import-Package>
                              org.apache.log4j
                             ,org.apache.log4j.*

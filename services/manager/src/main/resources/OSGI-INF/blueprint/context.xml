@@ -17,7 +17,7 @@
     <cm:property-placeholder id="manager-rs-config" persistent-id="edu.servicemix.esb.services.manager" update-strategy="reload">
         <cm:default-properties>
             <cm:property name="rs.address" value="/rest/manager"/>
-            <cm:property name="service.address" value="http://localhost:8080"/>
+            <cm:property name="service.address" value="http://localhost:8181/cxf/rest/schedule"/>
             <cm:property name="service.soTimeout" value="10"/>
             <cm:property name="service.http.connection.stalecheck" value="true"/>
             <cm:property name="service.http.socket.timeout" value="0"/>
@@ -28,10 +28,10 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
-    <bean id="managerScheduleService" class="edu.servicemix.esb.services.transformer.manager.ManagerScheduleService"/>
-    <bean id="eventHashGeneratorService" class="edu.servicemix.esb.services.transformer.manager.EventHashGeneratorService"/>
+    <bean id="managerScheduleService" class="edu.servicemix.esb.services.manager.ManagerScheduleService"/>
+    <bean id="eventHashGeneratorService" class="edu.servicemix.esb.services.manager.EventHashGeneratorService"/>
 
-    <bean id="managerRestService" class="edu.servicemix.esb.services.transformer.manager.rest.ManagerRestService">
+    <bean id="managerRestService" class="edu.servicemix.esb.services.manager.rest.ManagerRestService">
         <property name="producerTemplate" ref="managerProducerTemplate" />
     </bean>
 
@@ -77,7 +77,7 @@
                 <when>
                     <simple>${headers.operationName} == 'searchEvents'</simple>
                     <doTry>
-                        <toD uri="[[service.address]]?isExceptionThrows=true&amp;throwExceptionOnFailure=false&amp;chunked=false&amp;httpClient.soTimeout=[[service.soTimeout]]&amp;http.socket.timeout=[[service.http.socket.timeout]]&amp;http.connection.stalecheck=[[service.http.connection.stalecheck]]"/>
+                        <toD uri="[[service.address]]?throwExceptionOnFailure=false"/>
                         <filter>
                             <simple>${headers.Content-Type} not contains 'application/xml' or ${headers.CamelHttpResponseCode} >= 300</simple>
                             <log message="ManagerRestService: '${headers.operationName}' is finished with error, responseCode=${headers.CamelHttpResponseCode} | exid=${exchangeId}" logName="[[logger.name]]" loggingLevel="ERROR"/>

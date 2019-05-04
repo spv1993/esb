@@ -1,4 +1,4 @@
-package edu.servicemix.esb.services.transformer.manager.rest;
+package edu.servicemix.esb.services.manager.rest;
 
 import org.apache.camel.ProducerTemplate;
 import org.apache.log4j.Logger;

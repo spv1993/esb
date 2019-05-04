@@ -1,4 +1,4 @@
-package edu.servicemix.esb.services.transformer.manager.rest;
+package edu.servicemix.esb.services.manager.rest;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

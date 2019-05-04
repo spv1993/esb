@@ -1,4 +1,4 @@
-package edu.servicemix.esb.services.transformer.transformer.test;
+package edu.servicemix.esb.services.transformer.test;
 
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;

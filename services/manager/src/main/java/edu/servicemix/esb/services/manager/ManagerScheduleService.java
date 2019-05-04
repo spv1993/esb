@@ -1,4 +1,4 @@
-package edu.servicemix.esb.services.transformer.manager;
+package edu.servicemix.esb.services.manager;
 
 import org.apache.camel.Exchange;
 import org.apache.log4j.Logger;
