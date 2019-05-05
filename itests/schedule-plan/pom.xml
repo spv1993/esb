@@ -9,10 +9,11 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>transformation</artifactId>
+
+    <artifactId>schedule-plan</artifactId>
     <packaging>jar</packaging>
 
-    <name>edu.servicemix.esb.itests.transformation</name>
+    <name>edu.servicemix.esb.itests.schedule-plan</name>
 
     <dependencies>
         <dependency>
@@ -184,12 +185,58 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- ************************************************************************ -->
+        <!-- **************************************************************** -->
 
         <dependency>
-            <groupId>edu.servicemix.esb.services</groupId>
-            <artifactId>transformer</artifactId>
+            <groupId>edu.servicemix.esb.adapters</groupId>
+            <artifactId>events</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-cxf</artifactId>
+            <version>${camel.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf.xjc-utils</groupId>
+            <artifactId>cxf-xjc-runtime</artifactId>
+            <version>${xjc.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.karaf.features</groupId>
+            <artifactId>enterprise</artifactId>
+            <classifier>features</classifier>
+            <type>xml</type>
+            <version>${karaf.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ops4j.pax.jdbc</groupId>
+            <artifactId>pax-jdbc-features</artifactId>
+            <version>0.7.0</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-karaf</artifactId>
+            <type>xml</type>
+            <classifier>features</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -243,5 +290,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
